@@ -1,0 +1,73 @@
+//Define Pins
+#define pwm 2
+#define dir 3
+#define pot A1 //For State Switch
+#define buttonPin 8
+
+int state = 1;
+int pinA = 7;
+int pinB = 6; 
+int pinC = 4;
+int i = 179;
+
+
+void setup() {
+  pinMode(buttonPin, INPUT_PULLUP);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  
+  digitalWrite(buttonPin, HIGH);
+  
+  
+if(digitalRead(buttonPin) == LOW){
+  Serial.print("Button is Pressed");
+  digitalWrite(pwm,HIGH);
+  //PWM is valued between 0 and 255, must stay between these
+  if(state == 0)
+  {
+      //Cut the Motors
+      analogWrite(dir,0);
+      delay(1000);
+  }
+  else if(state == 1)
+  {
+      //For loop to ramp up speed
+      analogWrite(dir,i);
+      delay(100);       
+      if(i > -255)
+       {
+          i--;
+       }
+       else
+       {
+          i = -255; 
+       }
+  }
+  else if(state == 2)
+  {
+      //Fast State
+      
+       //For loop to ramp up speed
+       analogWrite(dir,i);
+       delay(100);
+       if(i > -254)
+       {
+          i -= 2;
+       }
+       else
+       {
+          i = -255; 
+       }
+  }
+}
+else
+  {
+   Serial.print("Buton is Not Pressed");
+   digitalWrite(pwm,LOW);
+   i = -179;  
+   analogWrite(dir,0);
+  }
+  //while(1) continue;
+}
